@@ -8,8 +8,7 @@ const transaction1 = new Transaction()
 const pdf = require('pdfkit')
 const fs = require('fs')
 var myDoc = new pdf;
-myDoc.pipe(fs.createWriteStream('node.pdf'));
-
+var path = require('path');
 
 //handle login route
 router.get('/', (req, res) => {
@@ -273,7 +272,26 @@ router.get('/logout',(req,res)=>{
 })
 
 router.get('/download',(req,res)=>{
-  res.send("download")
+  
+  myDoc.pipe(fs.createWriteStream('node.pdf'));
+  console.log(myDoc.path)
+  myDoc.font('Times-Roman')
+  .fontSize(40)
+  .text("Hello! NodeJS Doc Download",100,100)
+  myDoc.end();
+  // res.send("download")
+  var file = path.join("./", 'node.pdf');
+  
+  res.download(file, function (err) {
+    if (err) {
+        console.log("Error");
+        console.log(err);
+    } else {
+        
+        console.log("Success");
+    }
+  });
+  
 })
 
 
