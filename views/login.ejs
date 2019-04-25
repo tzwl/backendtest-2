@@ -1,0 +1,23 @@
+<div id="errormessagearea" style="background-color:rgba(216, 68, 48, 0.377)">
+    <% if (locals.errorMessage != null) { %>
+        
+            <%= errorMessage %><br>
+          
+    <% } %>
+</div>
+<div>
+    <form action="/login" method="GET">
+        LoginID
+        <% if (locals.inputid == null) { %>
+            <input type="text" name="loginid" >
+        <% }else{ %>
+            <input type="text" name="loginid" value="<%=inputid%>">
+        <% } %>
+        <br>
+        password<input type="password" name="password">
+        <br>
+        <button type="submit">Login</button>
+        <a href="/signup">Signup</a>
+    </form>
+</div>
+

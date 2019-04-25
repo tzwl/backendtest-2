@@ -1,0 +1,76 @@
+
+<a href="/top">cancel</a>
+<div id="errormessagearea" style="background-color:rgba(216, 68, 48, 0.377)">
+    <% if (locals.errorMessage != null) { %>
+        <% errorMessage.forEach(msg => { %>
+            <%= msg %><br>
+          <% }) %>
+    <% } %>
+</div>
+<div id="successmessagearea" style="background-color:rgba(93, 209, 39, 0.24)">
+        <% if (locals.successMessage != null) { %>            
+                <%= successMessage %><br>              
+        <% } %>
+</div>
+<div>    
+<form action="/edit" method="POST">
+Password <input type="password" name="password" value="<%=user.password%>">
+<br>
+First Name<input type="text" name="firstname" value="<%=user.firstname%>">
+<br>
+Last name<input type="text" name="lastname" value="<%=user.lastname%>">
+<br>
+Gender 
+<select name="gender">
+    <% if (user.gender == "M") { %>
+        <option value="M" selected>Male</option>
+        
+    <% }else{ %>
+        <option value="M" >Male</option>
+    <% } %>
+    <% if(user.gender == "F"){ %>
+        
+        <option value="F" selected>Female</option>
+    <% } else{%>
+    <option value="F">Female</option>
+    <% } %>   
+    
+</select>
+<br>
+Email<input type="text" name="email" value="<%=user.email%>">
+<br>
+Phone number<input type="text" name="phonenum" value="<%=user.phonenum%>">
+<br>
+Skill 
+
+<% if(skill!=null && skill.includes('java')) { %>
+<input type="checkbox" name="skill" value="java" checked> Java
+<% } else{%>
+
+<input type="checkbox" name="skill" value="java"> Java
+<% } %>
+<% if(skill!=null && skill.includes('php')) { %>
+<input type="checkbox" name="skill" value="php" checked> PHP
+<% } else{%>
+<input type="checkbox" name="skill" value="php"> PHP
+<% } %>
+<% if(skill!=null && skill.includes('jquery')) { %>
+<input type="checkbox" name="skill" value="jquery" checked> JQuery
+<% } else{%>
+<input type="checkbox" name="skill" value="jquery"> JQuery
+<% } %>
+<% if(skill!=null && skill.includes('html')) { %>
+<input type="checkbox" name="skill" value="html" checked> HTML
+<% } else{%>
+<input type="checkbox" name="skill" value="html"> HTML
+<% } %>
+<% if(skill!=null && skill.includes('css')) { %>
+<input type="checkbox" name="skill" value="css" checked> CSS
+<% } else{%>
+<input type="checkbox" name="skill" value="css"> CSS
+<% } %>
+<br/>
+<button type="submit">Edit</button>
+</form>
+
+</div>
