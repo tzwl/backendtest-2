@@ -10,6 +10,7 @@ const fs = require('fs')
 var myDoc = new pdf;
 var path = require('path');
 
+
 //handle login route
 router.get('/', (req, res) => {
   res.render('login')
@@ -106,15 +107,41 @@ start()
   
 })
 
-router.get('/login',(req,res)=>{
+router.get('/login',async(req,res)=>{
   
   var loginid = req.query.loginid;
   var psw = req.query.password;
- 
+  var tagarr = {};
+
+  await Tag.find({},(error,data)=>{
+      
+    data.forEach(value=>{
+      // console.log(value.userid)
+      tagarr[value.userid]=value.name
+  
+    })
+  })
+   
   User.findOne({Login:loginid,password:psw},(err,data)=>{
     if(data){
       req.session.loginid = loginid
-      
+         
+      if(data.isadmin == true){
+        //create document to download
+        myDoc.pipe(fs.createWriteStream('user.pdf'));
+        User.find({},(error,data)=>{         
+          data.forEach(value => {
+               
+            var content ="ID : "+value._id+"\nLogin : "+value.Login+"\nPassword : "+value.password+"\nFirst Name : "+value.firstname+"\nLast Name : "+value.lastname+"\nGender : "+value.gender+"\nEmail : "+value.email+"\nPhone Number : "+value.phonenum+"\nIsadmin : "+value.isadmin+"\nSkill : "+tagarr[value._id]+"\nCreatedAt : "+value.createdAt+"\nUpdatedAt : "+value.updatedAt+"\n\n";
+            myDoc.font('Times-Roman')
+              .fontSize(15)
+              .text(content,50);
+          });
+                    
+          myDoc.end();
+        })
+      } 
+              
       res.render("top",{
         flag: data.isadmin
       })
@@ -248,9 +275,12 @@ router.post('/edit', (req,res)=>{
   
 })
 
+
 router.get('/top',(req,res)=>{
+  
   User.findOne({Login:req.session.loginid},(err,data)=>{
     if(data){
+            
       res.render("top",{
         flag: data.isadmin
       })
@@ -272,15 +302,8 @@ router.get('/logout',(req,res)=>{
 })
 
 router.get('/download',(req,res)=>{
-  
-  myDoc.pipe(fs.createWriteStream('node.pdf'));
-  console.log(myDoc.path)
-  myDoc.font('Times-Roman')
-  .fontSize(40)
-  .text("Hello! NodeJS Doc Download",100,100)
-  myDoc.end();
-  // res.send("download")
-  var file = path.join("./", 'node.pdf');
+    
+  var file = path.join("./", 'user.pdf');
   
   res.download(file, function (err) {
     if (err) {
@@ -293,6 +316,5 @@ router.get('/download',(req,res)=>{
   });
   
 })
-
 
 module.exports = router
