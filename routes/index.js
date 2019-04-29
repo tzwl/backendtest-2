@@ -188,6 +188,7 @@ router.post('/edit', (req,res)=>{
   let msg =[];
   var userid = "";
   var tagid = "";
+  var admin_flg = "";
   var user = "User";
   var tag = "Tag";
   var sessionlogin = req.session.loginid
@@ -220,6 +221,7 @@ router.post('/edit', (req,res)=>{
       await User.findOne({Login:sessionlogin},(err,data)=>{
         if(data){
           userid = data._id
+          admin_flg = data.isadmin
         }
       })       
     
@@ -238,7 +240,7 @@ router.post('/edit', (req,res)=>{
         gender: req.body.gender,
         email: req.body.email,
         phonenum: req.body.phonenum,
-        isadmin: false
+        isadmin: admin_flg
       }
       
       var tagdata = {
