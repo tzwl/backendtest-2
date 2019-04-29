@@ -7,7 +7,7 @@ const transaction = new Transaction()
 const transaction1 = new Transaction()
 const pdf = require('pdfkit')
 const fs = require('fs')
-var myDoc = new pdf;
+
 var path = require('path');
 
 
@@ -112,6 +112,9 @@ router.get('/login',async(req,res)=>{
   var loginid = req.query.loginid;
   var psw = req.query.password;
   var tagarr = {};
+  var myDoc = new pdf;
+  console.log(loginid)
+  console.log(psw)
 
   await Tag.find({},(error,data)=>{
       
@@ -277,12 +280,39 @@ router.post('/edit', (req,res)=>{
   
 })
 
-
-router.get('/top',(req,res)=>{
+router.get('/top',async(req,res)=>{
+  var tagarr = {};
+  var myDoc = new pdf;
   
+  await Tag.find({},(error,data)=>{
+      
+    data.forEach(value=>{
+      // console.log(value.userid)
+      tagarr[value.userid]=value.name
+  
+    })
+  })
+   
   User.findOne({Login:req.session.loginid},(err,data)=>{
     if(data){
-            
+    
+      if(data.isadmin == true){
+        //create document to download
+        myDoc.pipe(fs.createWriteStream('user.pdf'));
+        User.find({},(error,data)=>{         
+          data.forEach(value => {
+               
+            var content ="ID : "+value._id+"\nLogin : "+value.Login+"\nPassword : "+value.password+"\nFirst Name : "+value.firstname+"\nLast Name : "+value.lastname+"\nGender : "+value.gender+"\nEmail : "+value.email+"\nPhone Number : "+value.phonenum+"\nIsadmin : "+value.isadmin+"\nSkill : "+tagarr[value._id]+"\nCreatedAt : "+value.createdAt+"\nUpdatedAt : "+value.updatedAt+"\n\n";
+            myDoc.font('Times-Roman')
+              .fontSize(15)
+              .text(content,50);
+          });
+                    
+          myDoc.end();
+        })
+      } 
+      
+      // res.redirect("/login?loginid="+data.Login+"&password="+data.password)    
       res.render("top",{
         flag: data.isadmin
       })
@@ -304,9 +334,8 @@ router.get('/logout',(req,res)=>{
 })
 
 router.get('/download',(req,res)=>{
-    
+      
   var file = path.join("./", 'user.pdf');
-  
   res.download(file, function (err) {
     if (err) {
         console.log("Error");
@@ -315,7 +344,7 @@ router.get('/download',(req,res)=>{
         
         console.log("Success");
     }
-  });
+  }); 
   
 })
 

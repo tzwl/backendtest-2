@@ -1,5 +1,5 @@
 <center>
-<div>
+<div id="loginarea" >
 <div id="errormessagearea" style="background-color:rgba(216, 68, 48, 0.377)">
     <% if (locals.errorMessage != null) { %>
         
@@ -9,15 +9,23 @@
 </div>
 <div>
     <form action="/login" method="GET">
-        LoginID
-        <% if (locals.inputid == null) { %>
-            <input type="text" name="loginid" >
-        <% }else{ %>
-            <input type="text" name="loginid" value="<%=inputid%>">
-        <% } %>
-        <br>
-        password<input type="password" name="password">
-        <br>
+        <table>
+            <tr>
+                <td>LoginID</td>
+                <td>
+                    <% if (locals.inputid == null) { %>
+                    <input type="text" name="loginid" >
+                    <% }else{ %>
+                    <input type="text" name="loginid" value="<%=inputid%>">
+                    <% } %>
+                </td>
+            </tr>
+            <tr>
+                <td>Password</td>
+                <td><input type="password" name="password"></td>
+            </tr>
+        </table>
+        
         <button type="submit">Login</button>
         <a href="/signup">Signup</a>
     </form>
