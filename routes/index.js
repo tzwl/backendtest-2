@@ -150,11 +150,11 @@ router.post('/login',async(req,res)=>{
       })
       
     }else{
-      res.send("Fail")
-//       res.render("login",{
-//         inputid: req.query.loginid,
-//         errorMessage: "User doesnot exist"
-//       })
+//       res.send("Fail")
+      res.render("login",{
+        inputid: req.query.loginid,
+        errorMessage: "User doesnot exist"
+      })
     }
   })
 })
