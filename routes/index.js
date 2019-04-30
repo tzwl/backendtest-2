@@ -107,7 +107,7 @@ start()
   
 })
 
-router.get('/login',async(req,res)=>{
+router.post('/login',async(req,res)=>{
   
   var loginid = req.query.loginid;
   var psw = req.query.password;
