@@ -109,8 +109,8 @@ start()
 
 router.post('/login',async(req,res)=>{
   
-  var loginid = req.query.loginid;
-  var psw = req.query.password;
+  var loginid = req.body.loginid;
+  var psw = req.body.password;
   var tagarr = {};
   var myDoc = new pdf;
   console.log(loginid)
@@ -152,7 +152,7 @@ router.post('/login',async(req,res)=>{
     }else{
 //       res.send("Fail")
       res.render("login",{
-        inputid: req.query.loginid,
+        inputid: req.body.loginid,
         errorMessage: "User doesnot exist"
       })
     }
