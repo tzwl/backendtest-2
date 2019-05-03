@@ -1,3 +1,7 @@
+if (process.env.NODE_ENV !== "production") {
+  require('dotenv').config();
+}
+
 const express = require('express')
 const app = express()
 const expressLayouts = require('express-ejs-layouts')
@@ -25,7 +29,7 @@ app.use(session({
 const mongoose = require('mongoose')
 mongoose.set('runValidators', true);  //do validation when update
 mongoose.set("useFindAndModify", false);
-mongoose.connect('mongodb+srv://thinzar:gOuVGubZslnIMSmu@cluster0-hok0q.mongodb.net/test?retryWrites=true', { useNewUrlParser: true })
+mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true });
 const db = mongoose.connection
 db.on('error', error => console.error(error))
 db.once('open', () => console.log('Connected to Mongoose'))
